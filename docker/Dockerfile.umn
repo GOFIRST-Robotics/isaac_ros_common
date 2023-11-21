@@ -5,7 +5,7 @@ USER root
 
 # to get list of packages rosdep install --reinstall --simulate --from-path src --ignore-src --skip-keys 'nvblox negotiated'| awk '{print $5 }'
 RUN apt-get update  && apt-get install -y \
- ros-humble-rclc \
+    ros-humble-rclc \
     libboost-all-dev \
     python3-pytest \
     ros-humble-joy \
@@ -19,7 +19,3 @@ RUN apt-get update  && apt-get install -y \
     ros-humble-can-msgs \
     ros-humble-usb-cam \
     && rm -rf /var/lib/apt/lists/*
-
-USER root
-# download zed modules
-RUN ZED_Diagnostic -nrlo 

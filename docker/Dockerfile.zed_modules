@@ -1,0 +1,7 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+USER root
+
+# download zed modules
+RUN ZED_Diagnostic -nrlo 
