@@ -23,9 +23,6 @@ RUN apt-get update  && apt-get install -y \
     python3-serial \
     python3-numpy \
     libboost-all-dev \
-    ros-humble-ros-gz \
-    ros-humble-sdformat-urdf \
-    ros-humble-joint-state-publisher-gui \
     python3-tqdm \
     python3-requests \
     libeigen3-dev \
