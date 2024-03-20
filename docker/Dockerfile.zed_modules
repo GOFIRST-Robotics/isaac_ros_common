@@ -4,4 +4,8 @@ FROM ${BASE_IMAGE}
 USER root
 
 # download zed modules
-RUN ZED_Diagnostic -nrlo 
+RUN if ZED_Diagnostic -nrlo; then \
+    echo "ZED modules already installed"; \
+    else \
+    echo "No ZED Installed"; \
+    fi
