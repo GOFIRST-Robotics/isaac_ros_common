@@ -2,18 +2,26 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 USER root
-
 RUN apt-get update && \
-    wget -nv --content-disposition 'https://api.ngc.nvidia.com/v2/resources/org/nvidia/deepstream/6.3/files?redirect=true&path=deepstream-6.3_6.3.0-1_amd64.deb' -O deepstream-6.3_6.3.0-1_amd64.deb && \
     apt-get install -y \
-    ./deepstream-6.3_6.3.0-1_amd64.deb \
-    gstreamer1.0-tools gstreamer1.0-alsa \
-    gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-    gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-    gstreamer1.0-libav \
     gstreamer1.0-tools gstreamer1.0-alsa \
     gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
     gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
     gstreamer1.0-libav && \
-    rm deepstream-6.3_6.3.0-1_amd64.deb && \
+    rm -rf /var/lib/apt/lists/*
+  
+COPY scripts/install-deepstream-x86_64.sh /opt/deepstream/install-deepstream-x86_64.sh
+COPY scripts/install-deepstream-aarch64.sh /opt/deepstream/install-deepstream-aarch64.sh
+
+RUN sudo chmod +x /opt/deepstream/install-deepstream-x86_64.sh
+RUN sudo chmod +x /opt/deepstream/install-deepstream-aarch64.sh
+
+RUN if [ "$(uname -m)" = "x86_64" ]; then \
+    /opt/deepstream/install-deepstream-x86_64.sh; \
+  else \
+    /opt/deepstream/install-deepstream-aarch64.sh; \
+  fi
+
+RUN apt-get update && apt-get install -y ./deepstream.deb && \
+    rm deepstream.deb && \
     rm -rf /var/lib/apt/lists/*
