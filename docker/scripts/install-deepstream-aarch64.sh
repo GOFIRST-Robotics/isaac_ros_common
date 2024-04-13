@@ -1,0 +1,1 @@
+wget -nv --content-disposition 'https://api.ngc.nvidia.com/v2/resources/org/nvidia/deepstream/6.3/files?redirect=true&path=deepstream-6.3_6.3.0-1_arm64.deb' -O deepstream.deb
