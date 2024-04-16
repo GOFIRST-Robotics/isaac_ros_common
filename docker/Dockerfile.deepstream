@@ -4,23 +4,31 @@ FROM ${BASE_IMAGE}
 USER root
 RUN apt-get update && \
     apt-get install -y \
-    gstreamer1.0-tools gstreamer1.0-alsa \
-    gstreamer1.0-plugins-base gstreamer1.0-plugins-good \
-    gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly \
-    gstreamer1.0-libav && \
+    gstreamer1.0-tools \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-ugly && \
     rm -rf /var/lib/apt/lists/*
   
-COPY scripts/install-deepstream-x86_64.sh /opt/deepstream/install-deepstream-x86_64.sh
-COPY scripts/install-deepstream-aarch64.sh /opt/deepstream/install-deepstream-aarch64.sh
 
-RUN sudo chmod +x /opt/deepstream/install-deepstream-x86_64.sh
-RUN sudo chmod +x /opt/deepstream/install-deepstream-aarch64.sh
+# Temporary layer since the DeepStream SDK is not publicly available since jetpack 6.0 is still pre-release
+# This will be removed once we rev jetpack to 6.0
+# https://developer.nvidia.com/downloads/deepstream-62-620-1-arm64-deb
+# https://developer.nvidia.com/downloads/deepstream-62-620-1-amd64-deb
+COPY deepstream/deepstream.deb deepstream.deb
 
-RUN if [ "$(uname -m)" = "x86_64" ]; then \
-    /opt/deepstream/install-deepstream-x86_64.sh; \
-  else \
-    /opt/deepstream/install-deepstream-aarch64.sh; \
-  fi
+# COPY scripts/install-deepstream-x86_64.sh /opt/deepstream/install-deepstream-x86_64.sh
+# COPY scripts/install-deepstream-aarch64.sh /opt/deepstream/install-deepstream-aarch64.sh
+
+# RUN sudo chmod +x /opt/deepstream/install-deepstream-x86_64.sh
+# RUN sudo chmod +x /opt/deepstream/install-deepstream-aarch64.sh
+
+# RUN if [ "$(uname -m)" = "x86_64" ]; then \
+#     /opt/deepstream/install-deepstream-x86_64.sh; \
+#   else \
+#     /opt/deepstream/install-deepstream-aarch64.sh; \
+#   fi
 
 RUN apt-get update && apt-get install -y ./deepstream.deb && \
     rm deepstream.deb && \
