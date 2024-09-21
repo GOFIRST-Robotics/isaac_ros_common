@@ -10,15 +10,17 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 
 ARG ZED_SDK_MAJOR=4
-ARG ZED_SDK_MINOR=0
+ARG ZED_SDK_MINOR=1
 
-# zed-ros2-wrapper dependencies
+# Install zed-ros2-wrapper dependencies
 RUN apt-get update && apt-get install -y \
     libgeographic-dev  \
     ros-humble-geographic-info \
     ros-humble-nmea-msgs \
     ros-humble-robot-localization \
     ros-humble-xacro \
+    ros-humble-point-cloud-transport \
+    ros-humble-rcpputils \
 && rm -rf /var/lib/apt/lists/* \
 && apt-get clean
 
